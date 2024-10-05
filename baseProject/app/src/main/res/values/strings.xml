@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">NachoRestaurante</string>
+    <string name="phone">Phone</string>
+    <string name="table_id">Table id:</string>
+    <string name="textview">TextView</string>
+    <string name="textviewName">TextView</string>
+    <string name="email">Email</string>
+    <string name="textviewemail">TextView</string>
+    <string name="name">Name</string>
+    <string name="addbtn">Add!</string>
+    <string name="more">MORE</string>
+</resources>
