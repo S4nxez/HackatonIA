@@ -1,8 +1,5 @@
 package nacho.llorente.data.repositorios
-import nacho.llorente.data.common.Constants
 import nacho.llorente.data.sources.service.CustomerService
-import nacho.llorente.domain.modelo.Customer
-import nacho.llorente.utils.NetworkResult
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import javax.inject.Inject
 @ActivityRetainedScoped
@@ -21,6 +18,7 @@ class CustomerRepository @Inject constructor(private val customerService: Custom
     */
 
 /*
+
 
     suspend fun deleteCustomer(id: Int): NetworkResult<String> {
         return try {
