@@ -2,7 +2,7 @@ package nacho.llorente.data.common
 
 class Constants {
     companion object {
-        const val BASE_URL = "http://informatica.iesquevedo.es:2326/IgnacioLlorente_RestaurantRest-OscarApruebame/api/"
+        const val BASE_URL = "https://api.openai.com/"
         const val CUSTOMERS = "customers"
         const val CUSTOMERSID = "customers/{id}"
         const val ORDERS = "orders"
@@ -20,5 +20,6 @@ class Constants {
         const val UNKNOWNERROR = "Unknown error"
         const val CUSTOMERNOTFOUND = "No customer found"
         const val ORDERNOTRETURNED = "No order returned"
+        const val GPT = "gpt"
     }
 }

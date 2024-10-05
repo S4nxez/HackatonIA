@@ -1,9 +1,6 @@
 package nacho.llorente.data.model
 
-import nacho.llorente.data.common.Constants
-import nacho.llorente.domain.modelo.Customer
 import com.google.gson.annotations.SerializedName
-import java.time.LocalDate
 
 data class CustomerResponse(
     //ESTE ES EL OBJETO QUE RECIBES DEL API, EL SERIALIZED INDICA EL NOMBRE DEL CAMPO EN EL JSON
