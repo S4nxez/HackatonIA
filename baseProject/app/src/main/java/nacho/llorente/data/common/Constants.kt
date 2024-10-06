@@ -2,7 +2,9 @@ package nacho.llorente.data.common
 
 class Constants {
     companion object {
-        const val BASE_URL = "https://api.openai.com/"
+        // Access your API key as a Build Configuration variable
+        const val geminiApiKey = "AIzaSyA1Z-sNJWczduJCpKOIB4DocBTfaN6HAUs"
+        const val BASE_URL = "https://api.d-id.com/"
         const val CUSTOMERS = "customers"
         const val CUSTOMERSID = "customers/{id}"
         const val ORDERS = "orders"

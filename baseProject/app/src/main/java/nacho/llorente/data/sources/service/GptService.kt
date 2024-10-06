@@ -10,5 +10,4 @@ interface GptService {
     @Headers("Content-Type: application/json")
     @POST("v1/chat/completions")
     suspend fun getGptResponse(@Body request: GptRequest): GptResponse
-
 }
