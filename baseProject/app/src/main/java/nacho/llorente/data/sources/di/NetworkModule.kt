@@ -6,6 +6,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import nacho.llorente.data.sources.service.DidService
+import nacho.llorente.data.sources.service.GeminiService
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -26,7 +28,11 @@ object NetworkModule {
         val apiKeyInterceptor = Interceptor { chain ->
             val originalRequest = chain.request()
             val newRequest = originalRequest.newBuilder()
+<<<<<<< Updated upstream
                 .addHeader("Authorization", "Basic aXRzbmFjaGV0dG8rY3VlbnRhdW5vQGdtYWlsLmNvbQ:3aXfZAQwq1fhausaAo7_Y")  // Cambia esto por tu API key
+=======
+                .addHeader("Authorization", "Basic aXRzbmFjaGV0dG8rY3VlbnRhdW5vQGdtYWlsLmNvbQ:A5khHb9hzlFvIOETsyfuO")  // Cambia esto por tu API key
+>>>>>>> Stashed changes
                 .build()
             chain.proceed(newRequest)
         }
@@ -67,9 +73,24 @@ object NetworkModule {
     fun provideCurrencyService(retrofit: Retrofit): CustomerService =
         retrofit.create(CustomerService::class.java)
 
+<<<<<<< Updated upstream
     @Singleton
     @Provides
     fun provideOrderService(retrofit: Retrofit): OrderService =
         retrofit.create(OrderService::class.java)
+=======
+    //ESTO ES AUTOMATICO, DECLARAS EL SERVICIO QUE QUIERES USAR
+    @Singleton
+    @Provides
+    fun provideDidService(retrofit: Retrofit): DidService {
+        return retrofit.create(DidService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideGeminiService(retrofit: Retrofit): GeminiService {
+        return retrofit.create(GeminiService::class.java)
+    }
+>>>>>>> Stashed changes
 
 }
