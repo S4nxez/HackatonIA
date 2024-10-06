@@ -17,19 +17,8 @@
         android:roundIcon="@drawable/logofinal"
         android:name="nacho.llorente.framework.ExamenApp"
         >
-
         <activity
             android:name=".framework.pantallamain.MainActivity"
-            android:exported="true"
-            android:permission="android.permission.INTERNET">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".framework.pantalladetallada.DetailedActivity"
             android:exported="true"
             android:permission="android.permission.INTERNET">
         </activity>
