@@ -1,11 +1,10 @@
 package nacho.llorente.data.sources.di
 import nacho.llorente.data.common.Constants
-import nacho.llorente.data.sources.service.CustomerService
-import nacho.llorente.data.sources.service.OrderService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -16,13 +15,24 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-    //ESTO ES AUTOMATICO, DECLARAS LA URL DEL API
+    //ESTO ES AUTOMATICO, DECLARAS LA URL DEL API y EL API KEY QUE VAS A USAR,
+    // ESTO NO SE PUEDE PONER AQUÍ PERO DE VERDAD HAY ALGUIEN QUE VAYA A VER ESTO?
 
     @Singleton
     @Provides
     fun provideHttpClient(): OkHttpClient {
+        // Interceptor para agregar la API key a todas las solicitudes
+        val apiKeyInterceptor = Interceptor { chain ->
+            val originalRequest = chain.request()
+            val newRequest = originalRequest.newBuilder()
+                .addHeader("Authorization", "Bearer YOUR_API_KEY")  // Cambia esto por tu API key
+                .build()
+            chain.proceed(newRequest)
+        }
+
         return OkHttpClient
             .Builder()
+            .addInterceptor(apiKeyInterceptor)  // Agregamos el interceptor
             .readTimeout(15, TimeUnit.SECONDS)
             .connectTimeout(15, TimeUnit.SECONDS)
             .build()
@@ -51,14 +61,8 @@ object NetworkModule {
             .build()
     }
 
-    @Singleton
-    @Provides
-    fun provideCurrencyService(retrofit: Retrofit): CustomerService =
-        retrofit.create(CustomerService::class.java)
 
-    @Singleton
-    @Provides
-    fun provideOrderService(retrofit: Retrofit): OrderService =
-        retrofit.create(OrderService::class.java)
+    //ESTO ES AUTOMATICO, DECLARAS EL SERVICIO QUE QUIERES USAR
+    //TODO PONER LOS SERVICIOS  DE DANI AQUÍ
 
 }

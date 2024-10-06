@@ -1,12 +1,14 @@
 package nacho.llorente.framework.pantallamain
-import nacho.llorente.domain.modelo.Customer
+import nacho.llorente.domain.modelo.Class
 
 sealed class MainEvent {
-    class DeleteCustomersSeleccionados() : MainEvent()
-    class DeleteCustomer(val customer:Customer) : MainEvent()
-    class SeleccionaCustomer(val customer: Customer) : MainEvent()
-    class GetCustomersFiltrados(val filtro: String) : MainEvent()
-    object GetCustomers : MainEvent()
+    class DeleteClassesSeleccionadas() : MainEvent()
+    class DeleteClass(val clase:Class) : MainEvent()
+    class SeleccionaClass(val clase: Class) : MainEvent()
+    class GetClassesFiltradas(val filtro: String) : MainEvent()
+    object GetClasses : MainEvent()
+
     object StartSelectMode: MainEvent()
     object ResetSelectMode: MainEvent()
+
 }

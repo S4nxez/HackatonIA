@@ -4,152 +4,165 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import nacho.llorente.domain.modelo.Customer
-import nacho.llorente.domain.usecases.DeleteCustomerUseCase
-import nacho.llorente.domain.usecases.GetAllCustomersUseCase
+import nacho.llorente.domain.modelo.Class
 import nacho.llorente.framework.common.ConstantesFramework
-import nacho.llorente.utils.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import nacho.llorente.domain.usecases.CreateClassFromInputUseCase
+import nacho.llorente.domain.usecases.DeleteClassUseCase
+import nacho.llorente.domain.usecases.GetAllClassesUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val getAllCustomersUseCase: GetAllCustomersUseCase,
-    private val deleteCustomerUseCase: DeleteCustomerUseCase,
+    private val getAllClassesUseCase: GetAllClassesUseCase,
+    private val deleteClassUseCase: DeleteClassUseCase,
+    private val createClassFromInputUseCase: CreateClassFromInputUseCase,
 ) : ViewModel() {
-    private val listaCustomers = mutableListOf<Customer>()
+    private val listaClasses = mutableListOf<Class>()
+    //private val listaClasses = mutableListOf<Class>()
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> get() = _error
 
-    private var selectedCustomers = mutableListOf<Customer>()
+    private var selectedClasses = mutableListOf<Class>()
+    //private var selectedClasses = mutableListOf<Class>()
     private val _uiState = MutableLiveData(MainState())
     val uiState: LiveData<MainState> get() = _uiState
 
     init {
         _uiState.value = MainState(
-            customers = emptyList(),
-            customersSeleccionadas = emptyList(),
+            classes = emptyList(),
+            classesSeleccionadas = emptyList(),
             selectMode = false,
             error = this.error.value
         )
         _error.value = ""
-        getCustomers()
+        getClasses()
     }
 
     fun handleEvent(event: MainEvent) {
         when (event) {
-            is MainEvent.SeleccionaCustomer -> seleccionaCustomer(event.customer)
+            is MainEvent.SeleccionaClass -> seleccionaClass(event.clase)
 
-            MainEvent.GetCustomers -> {
-                getCustomers()
+            MainEvent.GetClasses -> {
+                getClasses()
             }
-            is MainEvent.GetCustomersFiltrados -> getCustomers(event.filtro)
 
-            is MainEvent.DeleteCustomersSeleccionados -> {
+            is MainEvent.GetClassesFiltradas -> getClasses(event.filtro)
+
+            is MainEvent.DeleteClassesSeleccionadas -> {
                 _uiState.value?.let {
-                    deleteCustomer(it.customersSeleccionadas)
+                    deleteClass(it.classesSeleccionadas)
                     resetSelectMode()
                 }
             }
-            is MainEvent.DeleteCustomer -> {
-                deleteCustomer(event.customer)
+
+            is MainEvent.DeleteClass -> {
+                deleteClass(event.clase)
             }
 
             MainEvent.ResetSelectMode -> resetSelectMode()
+
             MainEvent.StartSelectMode -> _uiState.value =
                 _uiState.value?.copy(selectMode = true)
-
         }
     }
 
-    private fun seleccionaCustomer(customer: Customer) {
+    private fun seleccionaClass(clase: Class) {
         //si ya está seleccionado, lo quitamos de la lista, si no lo metemos
-        if (isSelected(customer)) {
-            selectedCustomers.remove(customer)
+        if (isSelected(clase)) {
+            selectedClasses.remove(clase)
         } else {
-            selectedCustomers.add(customer)
+            selectedClasses.add(clase)
         }
-        _uiState.value = _uiState.value?.copy(customersSeleccionadas = selectedCustomers)
+        _uiState.value = _uiState.value?.copy(classesSeleccionadas = selectedClasses)
     }
 
-    private fun getCustomers() {
+    private fun getClasses() {
         viewModelScope.launch {
-            val result = getAllCustomersUseCase.invoke()
+            val result = getAllClassesUseCase.invoke()
             when (result) {
-                is NetworkResult.Error<*> -> _error.value = result.message ?: ConstantesFramework.ERRORRED
-                is NetworkResult.Success<*> -> {
-                    if (result.data is List<*>) {
-                        listaCustomers.clear()
-                        listaCustomers.addAll(result.data as Collection<Customer>)
-                    }
+                is List<*> -> {
+                    listaClasses.clear()
+                    listaClasses.addAll(result as Collection<Class>)
                 }
             }
-            _uiState.value = _uiState.value?.copy(customers = listaCustomers)
+            _uiState.value = _uiState.value?.copy(classes = listaClasses)
         }
     }
 
-    private fun getCustomers(filtro: String) {
+    private fun getClasses(filtro: String) {
         viewModelScope.launch {
             _uiState.value = _uiState.value?.copy(
-                customers = listaCustomers.filter { customer ->
-                    customer.name.contains(filtro, ignoreCase = true)
+                classes = listaClasses.filter { Class ->
+                    Class.name.contains(filtro, ignoreCase = true)
                 }.toList()
             )
         }
     }
 
-
-    private fun deleteCustomer(customers: List<Customer>) {
+    //NO ES NETWORKRESULT, ES UNA LISTA ESTATICA, NO HAY OBJETO DE NETWORKRESULT
+    private fun deleteClass(classes: List<Class>) {
         viewModelScope.launch {
-            val copiaCustomers = customers.toList()
+            val copiaClasses = classes.toList()
 
-            val customersParaEliminar = mutableListOf<Customer>()
-
+            val classesParaEliminar = mutableListOf<Class>()
             var isSuccessful = true
-            for (customer in copiaCustomers) {
-                val result = deleteCustomerUseCase.invoke(customer)
-                if (result is NetworkResult.Error<*>) {
+
+            for (clase in copiaClasses) {
+                val wasDeleted = deleteClassUseCase.invoke(clase) // Devuelve Boolean
+                if (!wasDeleted) {
                     _error.value = ConstantesFramework.ERRORBORRAR
                     isSuccessful = false
                     break
                 } else {
-                    customersParaEliminar.add(customer)
+                    classesParaEliminar.add(clase)
                 }
             }
 
             if (isSuccessful) {
-                listaCustomers.removeAll(customersParaEliminar)
-                selectedCustomers.removeAll(customersParaEliminar)
-                _uiState.value =
-                    _uiState.value?.copy(customersSeleccionadas = selectedCustomers.toList())
+                listaClasses.removeAll(classesParaEliminar)
+                selectedClasses.removeAll(classesParaEliminar)
+                _uiState.value = _uiState.value?.copy(classesSeleccionadas = selectedClasses.toList())
             }
 
-            getCustomers()
+            getClasses()
         }
     }
 
 
-    private fun deleteCustomer(customer: Customer) {
+    private fun deleteClass(clase: Class) {
         viewModelScope.launch {
-            if (deleteCustomerUseCase.invoke(customer) is NetworkResult.Error<*>) {
-                _error.value = ConstantesFramework.ERRORBORRAR
+            val wasDeleted = deleteClassUseCase.invoke(clase) // Devuelve un Boolean
+
+            if (wasDeleted) {
+                // Si la clase fue eliminada exitosamente
+                listaClasses.remove(clase)
+                selectedClasses.remove(clase)
+                _uiState.value = _uiState.value?.copy(classesSeleccionadas = selectedClasses.toList())
             } else {
-                listaCustomers.remove(customer)
-                selectedCustomers.remove(customer)
-                _uiState.value =
-                    _uiState.value?.copy(customersSeleccionadas = selectedCustomers.toList())
+                // Si hubo un error en la eliminación
+                _error.value = ConstantesFramework.ERRORBORRAR
             }
         }
     }
+
 
     private fun resetSelectMode() {
-        selectedCustomers.clear()
+        //selectedClasses.clear()
+        selectedClasses.clear()
         _uiState.value =
-            _uiState.value?.copy(selectMode = false, customersSeleccionadas = selectedCustomers)
+            _uiState.value?.copy(selectMode = false,
+                classesSeleccionadas = selectedClasses)
     }
 
-    private fun isSelected(customer: Customer): Boolean {
-        return selectedCustomers.contains(customer)
+    private fun isSelected(Class: Class): Boolean {
+        return selectedClasses.contains(Class)
     }
+
+    /*
+    private fun isSelected(class: Class): Boolean {
+        return selectedClasses.contains(class)
+    }
+    */
 }

@@ -24,12 +24,12 @@
                 android:layout_height="?attr/actionBarSize"
                 app:menu="@menu/menu_app_bar"
                 app:navigationIcon="@drawable/logofinal"
-                app:title="Restaurante de Nacho" />
+                app:title="Lista de Clases" />
         </com.google.android.material.appbar.AppBarLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvCustomers"
+        android:id="@+id/rvClasses"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="10dp"
