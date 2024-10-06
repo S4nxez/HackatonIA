@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
     fun setupGemini() {
         binding.button2.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
-                val respuestaGemini = hacerllamada(binding.editTextText.toString())
+                val respuestaGemini = hacerllamada(binding.editTextText.text.toString())
                 val didFirstResponse = didRepository.sendText(respuestaGemini)
                 sleep(100000)
                 val didVideo = didRepository.getDidVideo(didFirstResponse)
@@ -79,14 +79,14 @@ class MainActivity : AppCompatActivity() {
         val generativeModel =
             GenerativeModel(
                 modelName = "gemini-1.5-flash",
-                apiKey = "AIzaSyA1Z-sNJWczduJCpKOIB4DocBTfaN6HAUs"
+                apiKey = "AIzaSyA1Z-sNJWczduJCpKOIB4DocBTfaN6HAUs" //disfrutad
             )
-        val prompt = "Eres un profesor especializado en el tema debes dar una resùesta de unas 10 lineas " +
+        val prompt = "Eres un profesor especializado en el tema debes dar una respuesta de unas 10 lineas " +
                 "que se te va a plantear. Debes dar respuestas estructuradas, claras y completas. " +
                 "Antes de responder, genera un índice de los principales puntos que vas a cubrir. Una " +
                 "vez dado el índice, procede a desarrollar la primera parte del mismo, explicando paso " +
                 "a paso y asegurándote de que la explicación sea comprensible. Mantén este estilo durante " +
-                "toda la conversación. Responde siempre de manera profesional y pedagógica. el tema " +
+                "toda la conversación. Responde siempre de manera profesional y pedagógica. NO LE DES FORMATO AL TEXTO NI UTILIZES MARKDOWN DE NUNGUNA MANERA, SOLO EL TEXTO PLANO. el tema " +
                 "es:"+request
         val response = generativeModel.generateContent(prompt)
         return response.text.toString();

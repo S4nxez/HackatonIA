@@ -1,4 +1,4 @@
 
-;kotlin:S6310C"Avoid hardcoded dispatchers.(Í¡·Ş8ÔİšŒ¦2
-Vkotlin:S6307A"2Replace this "Thread.sleep()" call with "delay()".(òÖò•ûÿÿÿÿ8×İšŒ¦2
-¥secrets:S6334R"_Make sure this Google API Key is either secured or revoked, changed, and removed from the code.(æ´ş£8ï­œ‹¦2J$c688937f-2f1a-4e56-a47f-673bfbd527d8
+akotlin:S6310C"Avoid hardcoded dispatchers.(Í¡·Ş8Úâ¿¦2J$fa4eb6ba-c1bc-4019-856f-4b51e650e902
+|kotlin:S6307A"2Replace this "Thread.sleep()" call with "delay()".(òÖò•ûÿÿÿÿ8Şâ¿¦2J$ea96be37-b09b-436d-8479-9ea936efe863
+ªsecrets:S6334R"_Make sure this Google API Key is either secured or revoked, changed, and removed from the code.(·Õ¼ëøÿÿÿÿ8Âô´¦2J$bff94c5e-d288-401c-a6d7-2c067b2046d6
