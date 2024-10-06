@@ -53,6 +53,19 @@ object NetworkModule {
 
     @Singleton
     @Provides
+    fun provideRetrofit(
+        okHttpClient: OkHttpClient,
+        moshiConverterFactory: MoshiConverterFactory
+    ): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(Constants.BASE_URL)
+            .client(okHttpClient)
+            .addConverterFactory(moshiConverterFactory)
+            .build()
+    }
+
+    @Singleton
+    @Provides
     fun provideCurrencyService(retrofit: Retrofit): CustomerService =
         retrofit.create(CustomerService::class.java)
 
