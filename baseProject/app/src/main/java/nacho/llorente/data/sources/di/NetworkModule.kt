@@ -6,6 +6,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -21,8 +22,18 @@ object NetworkModule {
     @Singleton
     @Provides
     fun provideHttpClient(): OkHttpClient {
+        // Interceptor para agregar la API key a todas las solicitudes
+        val apiKeyInterceptor = Interceptor { chain ->
+            val originalRequest = chain.request()
+            val newRequest = originalRequest.newBuilder()
+                .addHeader("Authorization", "Basic aXRzbmFjaGV0dG8rY3VlbnRhdW5vQGdtYWlsLmNvbQ:3aXfZAQwq1fhausaAo7_Y")  // Cambia esto por tu API key
+                .build()
+            chain.proceed(newRequest)
+        }
+
         return OkHttpClient
             .Builder()
+            .addInterceptor(apiKeyInterceptor)  // Agregamos el interceptor
             .readTimeout(15, TimeUnit.SECONDS)
             .connectTimeout(15, TimeUnit.SECONDS)
             .build()
@@ -48,19 +59,6 @@ object NetworkModule {
             .baseUrl(Constants.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(gsonConverterFactory)
-            .build()
-    }
-
-    @Singleton
-    @Provides
-    fun provideRetrofit(
-        okHttpClient: OkHttpClient,
-        moshiConverterFactory: MoshiConverterFactory
-    ): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(Constants.BASE_URL)
-            .client(okHttpClient)
-            .addConverterFactory(moshiConverterFactory)
             .build()
     }
 
