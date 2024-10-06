@@ -11,7 +11,7 @@ class GeminiServiceImpl: GeminiService{
         val generativeModel =
             GenerativeModel(
                 modelName = "gemini-1.5-flash",
-                apiKey = nacho.llorente.BuildConfig.GEMINI_API_KEY
+                apiKey = "AIzaSyA1Z-sNJWczduJCpKOIB4DocBTfaN6HAUs"
             )
         val prompt = "Eres un profesor especializado en el tema " +
                 "que se te va a plantear. Debes dar respuestas estructuradas, claras y completas. " +

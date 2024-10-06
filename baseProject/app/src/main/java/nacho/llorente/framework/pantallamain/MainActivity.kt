@@ -23,8 +23,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-        val apiKey = BuildConfig.GEMINI_API_KEY
-        primeraVez = true
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
